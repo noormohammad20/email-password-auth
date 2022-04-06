@@ -1,6 +1,6 @@
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth"
 import app from './firebase.init'
 import { Button, Form } from 'react-bootstrap'
 import { useState } from 'react'
@@ -60,18 +60,29 @@ function App() {
           console.log(user)
           setEmail('')
           setPassword('')
+          verifyEmail()
         })
         .catch(error => {
           console.error(error)
           setError(error.message)
         })
     }
-
-
-
     event.preventDefault()
   }
 
+  const passwordReset = () => {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        console.log('rest email send')
+      })
+  }
+
+  const verifyEmail = () => {
+    sendEmailVerification(auth.currentUser)
+      .then(() => {
+        console.log('Email Verification sent')
+      })
+  }
   return (
     <div>
       <div className="registration w-50 mx-auto">
@@ -98,6 +109,8 @@ function App() {
           <Form.Group className="mb-3" controlId="formBasicCheckbox">
             <Form.Check onChange={handleRegisteredChanged} type="checkbox" label="Already Registered?" />
           </Form.Group>
+          <Button onClick={passwordReset} variant="link">Forget Password?</Button>
+          <br />
           <p className='text-danger'> {error}</p>
           <Button variant="primary" type="submit">
             {registered ? 'Login' : ' Register'}
