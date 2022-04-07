@@ -40,7 +40,7 @@ function App() {
       return
     }
     if (!/(?=.*[A-Z])/.test(password)) {
-      setError('invalid password')
+      setError('You Must Be Use An Uppercase Word')
       return
     }
     setValidated(true)
